@@ -1,0 +1,212 @@
+/* ============================================================
+   custom.css — правки по ТЗ клиента (Synesthesia Travel)
+   Грузится ПОСЛЕДНИМ, поверх сгенерированного Тильдой CSS.
+   Все доработки сайта держим здесь, чтобы не трогать blocks-page.css.
+   ============================================================ */
+
+/* 13.2 «Ваша выгода»: сноска-звёздочка — мельче и чёрным, гармонично (фон белый) */
+#rec667936408 .tn-elem[data-elem-id="1700086085116"] .tn-atom {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  color: #1a1a1a !important;
+  opacity: .7;
+}
+
+/* ============ п.4 «Форматы»: картхолдеры + «Развернуть» ============ */
+/* убираем фиксированную высоту-«полотно» 1440px */
+#rec667905600 .t688__textwrapper { height: auto !important; min-height: 0 !important; padding-bottom: 26px; }
+#rec667905600 .t688__col,
+#rec667905600 .t688__inner-col { height: auto !important; }
+/* детальный текст спрятан, раскрывается по кнопке */
+#rec667905600 .t-card__descr {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height .55s ease, opacity .4s ease, margin-top .4s ease;
+  margin-top: 0;
+}
+#rec667905600 .t-card__descr.is-open { max-height: 4000px; opacity: 1; margin-top: 6px; }
+/* кнопка-переключатель */
+#rec667905600 .fmt-toggle {
+  display: inline-block; margin-top: 16px; cursor: pointer;
+  font-family: 'Jost', Arial, sans-serif; font-size: 13px; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase; color: #1a1a1a;
+  background: transparent; border: 1px solid rgba(0,0,0,.4); border-radius: 100px;
+  padding: 9px 24px; transition: background .3s, color .3s, border-color .3s;
+}
+#rec667905600 .fmt-toggle:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+/* ============ п.6.1 РТБ: 4 категории «выезжают» друг за другом ============ */
+#rec667908990 .tn-elem[data-elem-id="1649338097365"], #rec667908990 .tn-elem[data-elem-id="1649338097348"],
+#rec667908990 .tn-elem[data-elem-id="1700070397727"], #rec667908990 .tn-elem[data-elem-id="1700070397734"],
+#rec667908990 .tn-elem[data-elem-id="1700070437066"], #rec667908990 .tn-elem[data-elem-id="1700070437071"],
+#rec667908990 .tn-elem[data-elem-id="1700070437097"], #rec667908990 .tn-elem[data-elem-id="1700070437101"] {
+  opacity: 0; transform: translateY(42px);
+  transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+}
+#rec667908990.rtb-in .tn-elem[data-elem-id="1649338097365"], #rec667908990.rtb-in .tn-elem[data-elem-id="1649338097348"] { opacity: 1; transform: none; transition-delay: 0s; }
+#rec667908990.rtb-in .tn-elem[data-elem-id="1700070397727"], #rec667908990.rtb-in .tn-elem[data-elem-id="1700070397734"] { opacity: 1; transform: none; transition-delay: .18s; }
+#rec667908990.rtb-in .tn-elem[data-elem-id="1700070437066"], #rec667908990.rtb-in .tn-elem[data-elem-id="1700070437071"] { opacity: 1; transform: none; transition-delay: .36s; }
+#rec667908990.rtb-in .tn-elem[data-elem-id="1700070437097"], #rec667908990.rtb-in .tn-elem[data-elem-id="1700070437101"] { opacity: 1; transform: none; transition-delay: .54s; }
+
+/* ============ п.3.1 «Наши возможности»: галочки выезжают из краткого объяснения ============ */
+#rec667862590 .poss-rest {
+  display: block; max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height .55s ease, opacity .4s ease, margin-top .4s ease; margin-top: 0;
+}
+#rec667862590 .poss-toggle {
+  display: inline-block; margin-top: 10px; cursor: pointer; font-weight: 500;
+  border-bottom: 1px dashed currentColor; opacity: .8; user-select: none;
+}
+#rec667862590 .poss-toggle:hover { opacity: 1; }
+
+/* ============ п.2.1 «Зачем мы Вам?»: инфографика факторов ============ */
+#rec759757656 .why-factors { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 8px; max-width: 780px; }
+#rec759757656 .why-chip {
+  display: inline-flex; align-items: center; gap: 9px; padding: 9px 17px;
+  border: 1px solid rgba(127,127,127,.32); border-radius: 100px;
+  font-size: 15px; line-height: 1; white-space: nowrap;
+  background: rgba(127,127,127,.05);
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+  opacity: 0; transform: translateY(14px);
+}
+#rec759757656.why-in .why-chip { opacity: 1; transform: none; }
+#rec759757656.why-in .why-chip:nth-child(1){transition:opacity .5s ease .04s, transform .5s ease .04s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(2){transition:opacity .5s ease .10s, transform .5s ease .10s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(3){transition:opacity .5s ease .16s, transform .5s ease .16s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(4){transition:opacity .5s ease .22s, transform .5s ease .22s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(5){transition:opacity .5s ease .28s, transform .5s ease .28s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(6){transition:opacity .5s ease .34s, transform .5s ease .34s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(7){transition:opacity .5s ease .40s, transform .5s ease .40s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(8){transition:opacity .5s ease .46s, transform .5s ease .46s, border-color .25s, background .25s}
+#rec759757656.why-in .why-chip:nth-child(9){transition:opacity .5s ease .52s, transform .5s ease .52s, border-color .25s, background .25s}
+#rec759757656 .why-chip:hover { transform: translateY(-2px); border-color: #4ecdc4; background: rgba(78,205,196,.09); }
+#rec759757656 .why-dot {
+  width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto;
+  background: linear-gradient(135deg, #4ecdc4, #c9a96e);
+  box-shadow: 0 0 0 3px rgba(78,205,196,.13);
+}
+
+/* ============ п.3 нейро-фоны: фильтр под «Конструктор» (трасса) для читаемости текста ============ */
+#rec759791049 .t396__filter {
+  background-image: linear-gradient(180deg, rgba(8,20,30,.62), rgba(8,20,30,.52) 45%, rgba(8,20,30,.66)) !important;
+}
+
+/* ============ п.5.1 / 15.3 «Получить КП»: без формы — скачать + мессенджеры ============ */
+#rec759785832 .kp-actions {
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; justify-content: center;
+}
+/* колонка «кнопка PDF + подпись под ней» */
+#rec759785832 .kp-pdf-col {
+  display: inline-flex; flex-direction: column; align-items: center;
+}
+/* нативная кнопка Тильды (скачать PDF) остаётся как есть, лишь не растягиваем колонку */
+#rec759785832 .kp-btn-pdf { margin: 0 !important; }
+/* кнопки-мессенджеры: лёгкие «контурные», в тон сайта (#92d7e1) */
+#rec759785832 .kp-msg {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: 'Jost', Arial, sans-serif; font-size: 15px; font-weight: 500;
+  letter-spacing: .02em; line-height: 1; white-space: nowrap;
+  padding: 14px 26px; border-radius: 100px; cursor: pointer;
+  color: #1a4a52; background: rgba(146,215,225,.14);
+  border: 1px solid rgba(146,215,225,.6);
+  transition: background .3s, border-color .3s, transform .25s, box-shadow .3s;
+}
+#rec759785832 .kp-msg::before {
+  content: ""; width: 18px; height: 18px; flex: 0 0 auto;
+  background: currentColor; -webkit-mask: center/contain no-repeat; mask: center/contain no-repeat;
+}
+#rec759785832 .kp-msg--wa::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.6 6.3A8 8 0 0 0 4.9 16L4 20l4.1-1a8 8 0 0 0 3.8 1 8 8 0 0 0 5.7-13.7ZM12 18.5a6.6 6.6 0 0 1-3.4-.9l-.2-.2-2.5.7.7-2.4-.2-.3a6.6 6.6 0 1 1 5.6 3.1Zm3.6-4.9c-.2-.1-1.2-.6-1.3-.6-.2-.1-.3-.1-.4.1l-.6.7c-.1.2-.2.2-.4.1a5.4 5.4 0 0 1-2.7-2.3c-.2-.3.2-.3.5-1 .1-.1 0-.3 0-.4l-.6-1.4c-.2-.4-.3-.3-.5-.3h-.4a.8.8 0 0 0-.5.2c-.2.2-.7.7-.7 1.6s.7 1.9.8 2 1.3 2.1 3.3 2.9c1.2.5 1.7.6 2.3.5.4 0 1.2-.5 1.3-1 .2-.4.2-.9.1-1z'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.6 6.3A8 8 0 0 0 4.9 16L4 20l4.1-1a8 8 0 0 0 3.8 1 8 8 0 0 0 5.7-13.7ZM12 18.5a6.6 6.6 0 0 1-3.4-.9l-.2-.2-2.5.7.7-2.4-.2-.3a6.6 6.6 0 1 1 5.6 3.1Zm3.6-4.9c-.2-.1-1.2-.6-1.3-.6-.2-.1-.3-.1-.4.1l-.6.7c-.1.2-.2.2-.4.1a5.4 5.4 0 0 1-2.7-2.3c-.2-.3.2-.3.5-1 .1-.1 0-.3 0-.4l-.6-1.4c-.2-.4-.3-.3-.5-.3h-.4a.8.8 0 0 0-.5.2c-.2.2-.7.7-.7 1.6s.7 1.9.8 2 1.3 2.1 3.3 2.9c1.2.5 1.7.6 2.3.5.4 0 1.2-.5 1.3-1 .2-.4.2-.9.1-1z'/%3E%3C/svg%3E");
+}
+#rec759785832 .kp-msg--tg::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21.9 4.3 2.8 11.7c-1 .4-1 1.4-.1 1.7l4.9 1.5 1.8 5.8c.2.5.4.6.8.6.4 0 .6-.2.9-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8L23.9 5.4c.3-1.2-.5-1.8-2-1.1Zm-3.3 4-8.6 7.8-.3 3.6-1.4-4.6 9.6-6c.5-.3.9 0 .5.4z'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21.9 4.3 2.8 11.7c-1 .4-1 1.4-.1 1.7l4.9 1.5 1.8 5.8c.2.5.4.6.8.6.4 0 .6-.2.9-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8L23.9 5.4c.3-1.2-.5-1.8-2-1.1Zm-3.3 4-8.6 7.8-.3 3.6-1.4-4.6 9.6-6c.5-.3.9 0 .5.4z'/%3E%3C/svg%3E");
+}
+#rec759785832 .kp-msg:hover { background: rgba(146,215,225,.28); border-color: #92d7e1; transform: translateY(-2px); box-shadow: 0 8px 22px rgba(146,215,225,.28); }
+/* десктоп: кнопка PDF занимает всю строку → WhatsApp+Telegram переносятся вниз,
+   но остаются вдвоём на одной линии (мобильную раскладку не трогаем) */
+@media (min-width: 641px) {
+  #rec759785832 .kp-pdf-col { flex-basis: 100%; }
+}
+#rec759785832 .kp-note {
+  margin-top: 9px; max-width: 230px; text-align: center; line-height: 1.35;
+  font-family: 'Jost', Arial, sans-serif; font-size: 13px; color: #7f7f7f;
+}
+
+/* ============ п.7.1 «Фильм»: адаптивный RuTube-iframe 16:9 вместо пропавшего YouTube ============ */
+#rec667890117 .syn-rutube {
+  position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;
+  border-radius: 12px; background: #000;
+}
+#rec667890117 .syn-rutube iframe {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+}
+
+/* ============ п.1/4/7/8/10 «Соцсети в разделах»: ряд ссылок (клон из «Контактов») ============ */
+.syn-soc { text-align: center; margin: 20px auto 2px; width: 100%; }
+.syn-soc .t-sociallinks__wrapper {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 0; margin: 0; list-style: none;
+}
+.syn-soc .t-sociallinks__item { margin: 0 !important; }
+.syn-soc .t-sociallinks__item a { opacity: .8; transition: opacity .25s ease, transform .25s ease; }
+.syn-soc .t-sociallinks__item a:hover { opacity: 1; transform: translateY(-2px); }
+
+/* ============ п.13.1 «Ваша выгода»: спираль перерисована в SVG + медленное вращение-вихрь ============ */
+/* геометрия и вращение фазы витка — в custom.js (initSpiral); старую картинку прячем,
+   но оставляем в потоке (opacity:0), чтобы блок сохранил размеры. */
+#rec667936408 .tn-elem[data-elem-id="1700085620243"] .tn-atom { position: relative; }
+#rec667936408 .tn-elem[data-elem-id="1700085620243"] .tn-atom__img { opacity: 0; }
+#rec667936408 .syn-spiral {
+  position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible;
+  filter: drop-shadow(0 16px 26px rgba(60,90,120,.20));
+}
+/* тезисы выгод проявляются каскадом, когда блок попадает в зону видимости */
+#rec667936408 .tn-elem[data-elem-id="1700085656115"], #rec667936408 .tn-elem[data-elem-id="1700085811768"],
+#rec667936408 .tn-elem[data-elem-id="1700085859888"], #rec667936408 .tn-elem[data-elem-id="1700085893959"],
+#rec667936408 .tn-elem[data-elem-id="1700085918793"], #rec667936408 .tn-elem[data-elem-id="1700085943161"],
+#rec667936408 .tn-elem[data-elem-id="1700086000121"], #rec667936408 .tn-elem[data-elem-id="1700086033119"] {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700085656115"] { opacity: 1; transform: none; transition-delay: .05s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700085811768"] { opacity: 1; transform: none; transition-delay: .14s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700085859888"] { opacity: 1; transform: none; transition-delay: .23s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700085893959"] { opacity: 1; transform: none; transition-delay: .32s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700085918793"] { opacity: 1; transform: none; transition-delay: .41s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700085943161"] { opacity: 1; transform: none; transition-delay: .50s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700086000121"] { opacity: 1; transform: none; transition-delay: .59s; }
+#rec667936408.vygoda-in .tn-elem[data-elem-id="1700086033119"] { opacity: 1; transform: none; transition-delay: .68s; }
+
+/* ============ п.8.1 «Отзывы»: компактнее + аккуратный формат ============ */
+/* слайдер t670 жёстко позиционируется JS в px — безопасно уменьшаем масштабом
+   всего .t-slds__main целиком (внутренняя математика слайдера не меняется). */
+#rec667892990 .t-slds__main {
+  transform: scale(.72);
+  transform-origin: top center;
+  margin-bottom: -150px; /* убираем пустоту, образованную уменьшением (~0.28×550) */
+}
+/* карточка-формат: мягкое скругление + тень */
+#rec667892990 .t670__imgwrapper {
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 16px 44px rgba(10,25,35,.28);
+}
+/* на мобиле слайдер и так узкий — масштаб не нужен */
+@media (max-width: 640px) {
+  #rec667892990 .t-slds__main { transform: none; margin-bottom: 0; }
+}
+
+/* ====== «Что я учитываю при разработке маршрута»: новый формат — journey ====== */
+#rec759756010 .t565__line { background: linear-gradient(180deg, #4ecdc4, #c9a96e) !important; width: 3px !important; opacity: .55; }
+#rec759756010 .t565__circle { background: linear-gradient(135deg, #4ecdc4, #c9a96e) !important; box-shadow: 0 0 0 6px rgba(78,205,196,.12); border: none !important; }
+#rec759756010 .t565__number { color: #fff !important; }
+#rec759756010 .t565__block {
+  background: #f6f8f9; border: 1px solid rgba(78,205,196,.18); border-radius: 16px;
+  padding: 22px 26px !important; box-shadow: 0 10px 30px rgba(20,40,60,.06);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+#rec759756010 .t565__block:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(20,40,60,.10); }
+#rec759756010 .t565__title { font-family: 'Cormorant', Georgia, serif !important; }
+/* каскадный reveal */
+#rec759756010 .t565__item { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+#rec759756010.route-in .t565__item { opacity: 1; transform: none; }
