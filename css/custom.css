@@ -14,7 +14,7 @@
 
 /* ============ п.4 «Форматы»: картхолдеры + «Развернуть» ============ */
 /* убираем фиксированную высоту-«полотно» 1440px */
-#rec667905600 .t688__textwrapper { height: auto !important; min-height: 0 !important; padding-bottom: 26px; }
+#rec667905600 .t688__textwrapper { height: auto !important; min-height: 165px !important; padding-bottom: 26px; }
 #rec667905600 .t688__col,
 #rec667905600 .t688__inner-col { height: auto !important; }
 /* детальный текст спрятан, раскрывается по кнопке */
@@ -86,12 +86,35 @@
 }
 
 /* ============ п.3 нейро-фоны: фильтр под «Конструктор» (трасса) для читаемости текста ============ */
-#rec759791049 .t396__filter {
-  background-image: linear-gradient(180deg, rgba(8,20,30,.62), rgba(8,20,30,.52) 45%, rgba(8,20,30,.66)) !important;
+/* артборд — тёмный полупрозрачный градиент: трасса просвечивает, но затемнена
+   (светлее у заголовка сверху → темнее ниже, под белый текст шагов) */
+#rec759791049 .t396__artboard {
+  background: linear-gradient(180deg, rgba(8,16,26,.32) 0%, rgba(8,16,26,.60) 50%, rgba(8,16,26,.80) 100%) !important;
 }
 /* текст внутри «Собери свой тур» (Конструктор) — белым поверх тёмного фона-трассы
    («Заполните форму обратной связи» и пр.); цветные акценты #92d7e1 заданы инлайн и остаются */
-#rec759791049 .t396__elem .tn-atom { color: #ffffff; }
+#rec759791049 .t396__elem .tn-atom,
+#rec759791049 .t396__elem .tn-atom * { color: #ffffff !important; }
+
+/* «Собери свой тур»: заголовок перенесён ВНУТРЬ Конструктора (.syn-tour-head),
+   старый отдельный блок-заголовок прячем, разделитель — прозрачный */
+#rec667916510 { background-color: transparent; }
+#rec667914332 { display: none; }
+/* фон-трасса — общий для всего .t396 → заголовок + артборд на одном бесшовном кадре */
+#rec759791049 .t396 { position: relative; background: #0a1622 url("../assets/images/neuro/prioritety.opt.jpg") center top / cover no-repeat; }
+#rec759791049 .t396__carrier { background-image: none !important; }
+#rec759791049 .syn-tour-head { position: relative; z-index: 3; padding: 38px 16px; }
+#rec759791049 .syn-tour-head .t795__title { margin: 0; }
+#rec759791049 .syn-tour-head .t795__title, #rec759791049 .syn-tour-head .t795__title * {
+  color: #ffffff !important; text-shadow: 0 2px 14px rgba(0,0,0,.45);
+}
+
+/* голубая иконка-галочка вместо ✅ (план путешествия в Конструкторе) */
+.syn-check {
+  display: inline-block; width: 1.15em; height: 1.15em; vertical-align: -0.22em; margin-right: .5em;
+  background: center/contain no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%2392d7e1'/%3E%3Cpath d='M6.8 12.4l3.3 3.3L17 9' fill='none' stroke='%23ffffff' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
 
 /* ============ п.5.1 / 15.3 «Получить КП»: без формы — скачать + мессенджеры ============ */
 #rec759785832 .kp-actions {
@@ -181,20 +204,18 @@
 #rec667936408.vygoda-in .tn-elem[data-elem-id="1700086000121"] { opacity: 1; transform: none; transition-delay: .59s; }
 #rec667936408.vygoda-in .tn-elem[data-elem-id="1700086033119"] { opacity: 1; transform: none; transition-delay: .68s; }
 
-/* ============ п.8.1 «Отзывы»: компактнее + аккуратный формат ============ */
-/* слайдер t670 жёстко позиционируется JS в px — безопасно уменьшаем масштабом
-   всего .t-slds__main целиком (внутренняя математика слайдера не меняется). */
+/* ============ п.8.1 «Отзывы»: аккуратный формат + чуть меньше ============ */
+/* листанием управляет свой контроллер (initReviewsSlider), он считает сдвиг по
+   offsetWidth (layout), поэтому масштаб через transform безопасен. */
 #rec667892990 .t-slds__main {
-  transform: scale(.72);
+  transform: scale(.82);
   transform-origin: top center;
-  margin-bottom: -150px; /* убираем пустоту, образованную уменьшением (~0.28×550) */
+  margin-bottom: -100px; /* убрать пустоту от масштабирования (~0.18×550) */
 }
-/* карточка-формат: мягкое скругление + тень */
 #rec667892990 .t670__imgwrapper {
   border-radius: 16px; overflow: hidden;
   box-shadow: 0 16px 44px rgba(10,25,35,.28);
 }
-/* на мобиле слайдер и так узкий — масштаб не нужен */
 @media (max-width: 640px) {
   #rec667892990 .t-slds__main { transform: none; margin-bottom: 0; }
 }
@@ -202,7 +223,7 @@
 /* ====== «Что я учитываю при разработке маршрута»: новый формат — journey ====== */
 #rec759756010 .t565__line { background: linear-gradient(180deg, #4ecdc4, #c9a96e) !important; width: 3px !important; opacity: .55; }
 #rec759756010 .t565__circle { background: linear-gradient(135deg, #4ecdc4, #c9a96e) !important; box-shadow: 0 0 0 6px rgba(78,205,196,.12); border: none !important; }
-#rec759756010 .t565__number { color: #fff !important; }
+#rec759756010 .t565__number { color: #fff !important; top: 42% !important; font-size: 30px !important; }
 #rec759756010 .t565__block {
   background: #f6f8f9; border: 1px solid rgba(78,205,196,.18); border-radius: 16px;
   padding: 22px 26px !important; box-shadow: 0 10px 30px rgba(20,40,60,.06);

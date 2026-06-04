@@ -59,26 +59,115 @@
     io.observe(block);
   }
 
-  /* --- п.3.1 «Наши возможности»: галочки выезжают из краткого объяснения --- */
-  function initPossibilities() {
-    var toggles = document.querySelectorAll('#rec667862590 .poss-toggle');
-    toggles.forEach(function (tg) {
-      var rest = tg.nextElementSibling;
-      if (!rest || !rest.classList.contains('poss-rest')) return;
-      var open = false;
-      function set() {
-        rest.style.maxHeight = open ? (rest.scrollHeight + 60) + 'px' : '0px';
-        rest.style.opacity = open ? '1' : '0';
-        rest.style.marginTop = open ? '8px' : '0';
-        tg.innerHTML = open ? 'Свернуть&nbsp;⌃' : 'Подробнее&nbsp;⌄';
+  /* --- п.3.1 «Наши возможности»: карточки сжаты до кнопки «Подробнее» и
+     авто-растут при раскрытии. Это zero-блок Тильды (t396): «фигуры»-карточки и
+     тексты — отдельные абсолютно-позиционированные элементы. Считаем высоту каждой
+     карточки по контенту, двигаем нижний ряд и высоту артборда; при раскрытии плавно
+     растим. На десктопе (2 колонки); на узких экранах управление отдаём Тильде. */
+  function initPossCards() {
+    var root = document.getElementById('rec667862590');
+    if (!root) return;
+    var artboard = root.querySelector('.t396__artboard');
+    var defs = [
+      { box: '1649338097371', title: '1649338097365', body: '1649338097348', row: 0 },
+      { box: '1700070397684', title: '1700070397727', body: '1700070397734', row: 0 },
+      { box: '1700070437044', title: '1700070437066', body: '1700070437071', row: 1 },
+      { box: '1700070437078', title: '1700070437097', body: '1700070437101', row: 1 }
+    ];
+    function el(id) { return root.querySelector('.tn-elem[data-elem-id="' + id + '"]'); }
+    var cards = defs.map(function (d) {
+      var box = el(d.box), title = el(d.title), body = el(d.body);
+      if (!box || !body) return null;
+      return {
+        box: box, title: title, body: body, row: d.row, open: false,
+        rest: body.querySelector('.poss-rest'), toggle: body.querySelector('.poss-toggle')
+      };
+    }).filter(Boolean);
+    if (cards.length < 4 || !artboard) return; // структура иная — не вмешиваемся
+
+    var GAP = 40, BOTTOMPAD = 64, PAD = 30, MINW = 961;
+    var px = function (v) { return parseFloat(v) || 0; };
+    var saved = false, applied = false, transitioned = false;
+
+    function save() {
+      if (saved) return; saved = true;
+      cards.forEach(function (c) {
+        c.boxTop0 = px(c.box.style.top);
+        c.boxCss0 = c.box.style.cssText;
+        c.titleOff = c.title ? (px(c.title.style.top) - c.boxTop0) : 0;
+        c.bodyOff = px(c.body.style.top) - c.boxTop0;
+        c.titleCss0 = c.title ? c.title.style.cssText : '';
+        c.bodyCss0 = c.body.style.cssText;
+        c.bodyCollapsedH = c.body.getBoundingClientRect().height; // .poss-rest свёрнут в CSS
+      });
+      artboard._css0 = artboard.style.cssText;
+    }
+    function restore() {
+      cards.forEach(function (c) {
+        c.box.style.cssText = c.boxCss0;
+        if (c.title) c.title.style.cssText = c.titleCss0;
+        c.body.style.cssText = c.bodyCss0;
+      });
+      artboard.style.cssText = artboard._css0;
+      applied = false; transitioned = false;
+    }
+    function relayout() {
+      if (window.innerWidth < MINW) { if (applied) restore(); return; }
+      save(); applied = true;
+      // общая минимальная высота свёрнутой карточки = по самой высокой (у всех одинаковая)
+      var common = 0;
+      cards.forEach(function (c) { common = Math.max(common, c.bodyOff + c.bodyCollapsedH + PAD); });
+      cards.forEach(function (c) {
+        c._h = (c.open && c.rest) ? (c.bodyOff + c.bodyCollapsedH + c.rest.scrollHeight + PAD) : common;
+      });
+      var row0bottom = 0;
+      cards.forEach(function (c) { if (c.row === 0) { c._top = c.boxTop0; row0bottom = Math.max(row0bottom, c._top + c._h); } });
+      var row1top = row0bottom + GAP, row1bottom = 0;
+      cards.forEach(function (c) { if (c.row === 1) { c._top = row1top; row1bottom = Math.max(row1bottom, c._top + c._h); } });
+      cards.forEach(function (c) {
+        c.box.style.top = c._top + 'px';
+        c.box.style.height = c._h + 'px';
+        if (c.title) c.title.style.top = (c._top + c.titleOff) + 'px';
+        c.body.style.top = (c._top + c.bodyOff) + 'px';
+      });
+      artboard.style.height = (row1bottom + BOTTOMPAD) + 'px';
+      if (!transitioned) {
+        transitioned = true;
+        requestAnimationFrame(function () {
+          cards.forEach(function (c) {
+            c.box.style.transition = 'top .5s ease, height .5s ease';
+            if (c.title) c.title.style.transition = 'top .5s ease';
+            c.body.style.transition = 'top .5s ease';
+          });
+          artboard.style.transition = 'height .5s ease';
+        });
       }
-      set();
-      function toggle() { open = !open; set(); }
-      tg.addEventListener('click', toggle);
-      tg.addEventListener('keydown', function (e) {
+    }
+
+    cards.forEach(function (c) {
+      if (!c.toggle || !c.rest) return;
+      function setText() { c.toggle.innerHTML = c.open ? 'Свернуть&nbsp;⌃' : 'Подробнее&nbsp;⌄'; }
+      setText();
+      function toggle() {
+        c.open = !c.open;
+        c.rest.style.maxHeight = c.open ? (c.rest.scrollHeight + 60) + 'px' : '0px';
+        c.rest.style.opacity = c.open ? '1' : '0';
+        c.rest.style.marginTop = c.open ? '8px' : '0';
+        setText();
+        relayout();
+      }
+      c.toggle.addEventListener('click', toggle);
+      c.toggle.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
       });
     });
+
+    // первичная раскладка — после того как Тильда спозиционировала zero-блок
+    function boot() { relayout(); }
+    window.addEventListener('load', boot);
+    setTimeout(boot, 500);
+    var rt;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(boot, 160); });
   }
 
   /* generic: добавить класс блоку, когда он попал в зону видимости */
@@ -207,12 +296,86 @@
     });
   }
 
+  /* --- п.4 «Форматы»: одинаковая высота карточек в свёрнутом виде ---
+     Заголовки форматов разной длины (1–2 строки) → выравниваем серую плашку
+     по самой высокой. При раскрытии карточка растёт сверх min-height. */
+  function equalizeFormats() {
+    var wraps = document.querySelectorAll('#rec667905600 .t688__textwrapper');
+    if (!wraps.length) return;
+    wraps.forEach(function (w) { w.style.minHeight = ''; });
+    if (window.innerWidth < 961) return; // на узких — колонкой, выравнивать не нужно
+    var max = 0;
+    wraps.forEach(function (w) { max = Math.max(max, w.getBoundingClientRect().height); });
+    wraps.forEach(function (w) { w.style.minHeight = max + 'px'; });
+  }
+
+  /* --- Конструктор: заменяем ✅ в плане путешествия на голубые иконки-галочки --- */
+  function initChecks() {
+    var atom = document.querySelector('#rec759791049 .tn-elem[data-elem-id="1717877104636"] .tn-atom');
+    if (!atom || atom.getAttribute('data-syn-checks')) return;
+    if (atom.innerHTML.indexOf('✅') === -1) return;
+    atom.setAttribute('data-syn-checks', '1');
+    atom.innerHTML = atom.innerHTML.replace(/✅\s?/g, '<span class="syn-check" aria-hidden="true"></span>');
+  }
+
+  /* --- п.8.1 «Отзывы»: собственный контроллер слайдера t670 ---
+     Tilda-слайдер в офлайн-выгрузке не листает. Перехватываем управление:
+     снимаем её обработчики со стрелок/точек (клонированием) и сами двигаем ленту.
+     Сдвиг считаем в offsetWidth (layout-пиксели) — он не зависит от CSS transform,
+     поэтому можно безопасно уменьшить блок масштабом. */
+  function initReviewsSlider() {
+    var root = document.getElementById('rec667892990');
+    if (!root || root.getAttribute('data-syn-slider')) return;
+    var wrap = document.getElementById('carousel_667892990');
+    if (!wrap) return;
+    var items = Array.prototype.filter.call(wrap.children, function (n) {
+      return n.classList && n.classList.contains('t-slds__item');
+    });
+    if (items.length < 4) return; // [клон, 1, 2, 3, клон]
+    root.setAttribute('data-syn-slider', '1');
+    var REAL = 3, cur = 0;
+    function W() { return items[1].offsetWidth; }
+    function strip(node) { if (!node) return null; var c = node.cloneNode(true); node.parentNode.replaceChild(c, node); return c; }
+    var bullets = Array.prototype.slice.call(root.querySelectorAll('.t-slds__bullet'));
+    function go(n, anim) {
+      cur = ((n % REAL) + REAL) % REAL;
+      wrap.style.transition = anim === false ? 'none' : 'transform .45s ease';
+      wrap.style.transform = 'translateX(-' + ((cur + 1) * W()) + 'px)';
+      bullets.forEach(function (b, i) {
+        var on = (i === cur);
+        b.classList.toggle('t-slds__bullet_active', on);
+        var btn = b.querySelector('button'); if (btn) btn.setAttribute('aria-current', on ? 'true' : 'false');
+      });
+      items.forEach(function (it) { it.setAttribute('aria-hidden', 'true'); });
+      if (items[cur + 1]) items[cur + 1].setAttribute('aria-hidden', 'false');
+    }
+    var left = strip(root.querySelector('.t-slds__arrow-left'));
+    var right = strip(root.querySelector('.t-slds__arrow-right'));
+    if (left) left.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); go(cur - 1); });
+    if (right) right.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); go(cur + 1); });
+    bullets = bullets.map(function (b) { return strip(b); });
+    bullets.forEach(function (b, i) { b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); go(i); }); });
+    go(0, false);
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { go(cur, false); }, 150); });
+  }
+  // запускаем поздно — после инициализации Tilda, чтобы перехватить управление
+  window.addEventListener('load', function () { setTimeout(initReviewsSlider, 300); });
+  setTimeout(initReviewsSlider, 1200);
+
   ready(initFormats);
   ready(initRTB);
-  ready(initPossibilities);
+  ready(initPossCards);
   ready(initWhy);
   ready(initRoute);
   ready(initVygoda);
   ready(initSpiral);
   ready(initSocialLinks);
+  ready(initChecks);
+  ready(equalizeFormats);
+  window.addEventListener('load', equalizeFormats);
+  setTimeout(equalizeFormats, 900);
+  // пересчёт после подгрузки веб-шрифтов (иначе высоту меряем до переноса заголовка на 2 строки)
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(equalizeFormats); }
+  var _eft;
+  window.addEventListener('resize', function () { clearTimeout(_eft); _eft = setTimeout(equalizeFormats, 160); });
 })();
